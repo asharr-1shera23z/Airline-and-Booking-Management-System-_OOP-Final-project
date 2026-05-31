@@ -98,7 +98,7 @@ public class StartFrame extends JFrame {
         center.add(adminSignupButton);
         main.add(center, BorderLayout.CENTER);
 
-        JLabel footer = new JLabel("BY     Ashar    Usman     Zarak     Faizan", SwingConstants.CENTER);
+        JLabel footer = new JLabel("Faizan Ahmad, M. Ashar Sheraz, M. Usman Azeem, Zarak Khan", SwingConstants.CENTER);
         footer.setFont(new Font("Times New Roman", Font.ITALIC, 17));
         footer.setForeground(Color.GRAY);
         main.add(footer, BorderLayout.SOUTH);

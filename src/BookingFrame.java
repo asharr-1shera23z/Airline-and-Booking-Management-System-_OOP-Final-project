@@ -260,28 +260,31 @@ public class BookingFrame extends JFrame {
         String choice = (String) paymentCombo.getSelectedItem();
         switch (choice) {
             case "Card": {
-                String num = JOptionPane.showInputDialog(this, "Card Number:");
-                if (num == null)
-                    return null;
+                String num = JOptionPane.showInputDialog(this, "Card Number (16 Digits):");
+                if (num == null || num.trim().isEmpty()) return null;
+
                 String holder = JOptionPane.showInputDialog(this, "Card Holder Name:");
-                if (holder == null)
-                    return null;
+                if (holder == null || holder.trim().isEmpty()) return null;
+
                 String exp = JOptionPane.showInputDialog(this, "Expiry (MM/YY):");
-                if (exp == null)
-                    return null;
-                return new CardPayment(num, holder, exp);
+                if (exp == null || exp.trim().isEmpty()) return null;
+
+                String cvv = JOptionPane.showInputDialog(this, "CVV (3-4 Digits):");
+                if (cvv == null || cvv.trim().isEmpty()) return null;
+
+                return new CardPayment(num.trim(), holder.trim(), exp.trim(), cvv.trim());
             }
             case "Cash":
                 return new CashPayment();
 
             case "Bank Transfer": {
                 String acc = JOptionPane.showInputDialog(this, "Account Number:");
-                if (acc == null)
-                    return null;
+                if (acc == null || acc.trim().isEmpty()) return null;
+
                 String bk = JOptionPane.showInputDialog(this, "Bank Name:");
-                if (bk == null)
-                    return null;
-                return new BankTransferPayment(acc, bk);
+                if (bk == null || bk.trim().isEmpty()) return null;
+
+                return new BankTransferPayment(acc.trim(), bk.trim());
             }
         }
         return null;
