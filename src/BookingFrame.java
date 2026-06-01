@@ -27,7 +27,7 @@ public class BookingFrame extends JFrame {
         this.system = system;
         this.parent = parent;
 
-        setTitle("Book Your Ticket " + user.getName());
+        setTitle("Book Your Ticket_" + user.getName());
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -41,9 +41,7 @@ public class BookingFrame extends JFrame {
         main.setBackground(Color.WHITE);
 
         Color darkBlue = new Color(0, 0, 139);
-        Color green = new Color(46, 125, 50);
-        Color red = new Color(220, 0, 0);
-
+   
         JPanel centerPanel = new JPanel(new BorderLayout(15, 15));
         centerPanel.setBackground(Color.WHITE);
 
@@ -76,52 +74,119 @@ public class BookingFrame extends JFrame {
 
         top.add(new JScrollPane(flightTable), BorderLayout.CENTER);
         
-        // ---------- Middle: booking details ----------
-        JPanel mid = new JPanel(new GridLayout() );
-        mid.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(darkBlue, 2),
-                "2. Booking Details", TitledBorder.LEFT, TitledBorder.TOP,
-                new Font("Times New Roman", Font.BOLD, 16), darkBlue));
+        // ____________________ Middle: seat, luggage, payment ____________________
+        
+        JPanel mid = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 6));
+        mid.setBackground(Color.WHITE);
 
-        mid.add(new JLabel("Available Seats:"));
+        TitledBorder bookingBorder = BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(darkBlue, 2), "2. Booking Details",
+            TitledBorder.LEFT,
+            TitledBorder.TOP, new Font("Times New Roman", Font.BOLD, 18), darkBlue
+        );
+        mid.setBorder(BorderFactory.createCompoundBorder( bookingBorder, BorderFactory.createEmptyBorder(8, 6, 8, 6) ));
+            
         seatCombo = new JComboBox<>();
-        seatCombo.setPreferredSize(new Dimension(220, 35));
+        seatCombo.setPreferredSize(new Dimension(115, 28));
+        seatCombo.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        mid.add(new JLabel("Available Seats:"));
         mid.add(seatCombo);
 
-        mid.add(new JLabel("Luggage Weight (kg):"));
         luggageField = new JTextField("0");
+        luggageField.setPreferredSize(new Dimension(55, 28));   
+        luggageField.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        mid.add(new JLabel("Luggage (kg):"));
         mid.add(luggageField);
 
-        mid.add(new JLabel("Payment Method:"));
-        paymentCombo = new JComboBox<>(new String[] { "Card", "Cash", "Bank Transfer" });
+        paymentCombo = new JComboBox<>(new String[]{"Card", "Cash", "Bank"});
+        paymentCombo.setPreferredSize(new Dimension(95, 28));     
+        paymentCombo.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        mid.add(new JLabel("Payment:"));
         mid.add(paymentCombo);
 
-        JButton calcBtn = new JButton("Calculate Total");
-        calcBtn.setBackground(new Color(30, 60, 120));
-        calcBtn.setFont(new Font("Times New Roman", Font.BOLD, 8));
+        JButton calcBtn = new JButton("Calculate") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(30, 60, 120));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+
+        calcBtn.setForeground(Color.WHITE);
+        calcBtn.setFont(new Font("Times New Roman", Font.BOLD, 12));
+        calcBtn.setFocusPainted(false);
+        calcBtn.setBorderPainted(false);
+        calcBtn.setContentAreaFilled(false);
+        calcBtn.setOpaque(false);
+        calcBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        calcBtn.setPreferredSize(new Dimension(88, 28));
+        calcBtn.setBorder(BorderFactory.createEmptyBorder(3, 8, 3, 8));
+        calcBtn.addActionListener(e -> updateTotal());
         mid.add(calcBtn);
 
         totalLabel = new JLabel("Total_Rs:", SwingConstants.CENTER);
-        totalLabel.setFont(new Font("Times New Roman", Font.BOLD, 10));
+        totalLabel.setFont(new Font("Times New Roman", Font.BOLD, 11));
         totalLabel.setForeground(darkBlue);
         mid.add(totalLabel);
 
-        calcBtn.addActionListener(e -> updateTotal());
         centerPanel.add(top, BorderLayout.CENTER);
         centerPanel.add(mid, BorderLayout.SOUTH);
         
         main.add(centerPanel, BorderLayout.CENTER);
 
-        // ---------- Bottom: confirm / cancel ----------
+        // ___________________________ bottom: confirm/cancel ___________________________
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
         bottom.setBackground(Color.WHITE);
 
-        JButton confirm = new JButton("Confirm Booking");
-        confirm.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        confirm.setBackground(green);
-        JButton cancel = new JButton("Cancel");
-        cancel.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        cancel.setBackground(red);
+    
+        JButton confirm = new JButton("Confirm Booking") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+
+                g2.setColor(new Color(0, 150, 80));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 18, 18);
+
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        confirm.setForeground(Color.WHITE);
+        confirm.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        confirm.setFocusPainted(false);
+        confirm.setBorderPainted(false);
+        confirm.setContentAreaFilled(false);
+        confirm.setOpaque(false);
+        confirm.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        confirm.setPreferredSize(new Dimension(150, 35));
+        confirm.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
+
+        JButton cancel = new JButton("Cancel") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 18, 18);
+
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+
+        cancel.setForeground(Color.WHITE);
+        cancel.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        cancel.setFocusPainted(false);
+        cancel.setBorderPainted(false);
+        cancel.setContentAreaFilled(false);
+        cancel.setOpaque(false);
+        cancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cancel.setPreferredSize(new Dimension(150, 35));
+        cancel.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
 
         confirm.addActionListener(e -> doConfirm());
         cancel.addActionListener(e -> dispose());

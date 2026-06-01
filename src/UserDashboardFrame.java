@@ -53,12 +53,53 @@ public class UserDashboardFrame extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         buttonPanel.setOpaque(false);
 
-        JButton updateBtn = new JButton("Update Profile");
-        updateBtn.setBackground(new Color(0, 150, 0));
+        
+        JButton updateBtn = new JButton("Update Profile") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+
+                g2.setColor(new Color(0, 150, 80));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 18, 18);
+
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        updateBtn.setForeground(Color.WHITE);
+        updateBtn.setFont(new Font("Times New Roman", Font.BOLD, 13));
+        updateBtn.setFocusPainted(false);
+        updateBtn.setBorderPainted(false);
+        updateBtn.setContentAreaFilled(false);
+        updateBtn.setOpaque(false);
+        updateBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        updateBtn.setPreferredSize(new Dimension(120, 22));
+        updateBtn.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
         updateBtn.addActionListener(e -> updateUserProfile());
 
-        JButton deleteBtn = new JButton("Delete Account");
-        deleteBtn.setBackground(new Color(220, 50, 50));
+        JButton deleteBtn = new JButton("Delete Account") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 18, 18);
+
+                g2.dispose();
+
+                // text show karne ke liye
+                super.paintComponent(g);
+            }
+        };
+        deleteBtn.setForeground(Color.WHITE);
+        deleteBtn.setFont(new Font("Times New Roman", Font.BOLD, 13));
+        deleteBtn.setFocusPainted(false);
+        deleteBtn.setBorderPainted(false);
+        deleteBtn.setContentAreaFilled(false);
+        deleteBtn.setOpaque(false);
+        deleteBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteBtn.setPreferredSize(new Dimension(120, 22));
+        deleteBtn.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
         deleteBtn.addActionListener(e -> deleteUserAccount());
 
         JButton logoutBtn = new JButton("Logout");
@@ -74,6 +115,9 @@ public class UserDashboardFrame extends JFrame {
         main.add(top, BorderLayout.NORTH);
         
         tabs = new JTabbedPane();
+        tabs.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+
         tabs.addTab("Search Flights",     FlightSearchPanel());
         tabs.addTab("Book Ticket",        BookingPanel());
         tabs.addTab("My Bookings",        BookingDisplayPanel());
@@ -186,7 +230,7 @@ public class UserDashboardFrame extends JFrame {
           + "and pay using your preferred method."
           + "</body></html>");
 
-        info.setFont(new Font("Arial", Font.PLAIN, 13));
+        info.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         p.add(info, BorderLayout.NORTH);
 
         JButton start = new JButton("Start New Booking");
@@ -205,22 +249,19 @@ public class UserDashboardFrame extends JFrame {
     // _____________________ TAB 3: View Booking/tickets  ____________________
     private JPanel BookingDisplayPanel() {
         Color darkBlue = new Color(0, 0, 139);
-        Color lightBlue = new Color(235, 243, 255);
         
-        JPanel p = new JPanel(new BorderLayout(15, 15));
-        p.setBackground(lightBlue);
-        p.setBorder(BorderFactory.createEmptyBorder(18, 22, 18, 22));
-
-        JPanel header = new JPanel(new BorderLayout(5, 5));
-        header.setBackground(lightBlue);
-
-        JLabel title = new JLabel("My Bookings");
-        title.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        title.setForeground(darkBlue);
-        header.setBorder(BorderFactory.createEmptyBorder(0, 0, 12, 0));
-            
-        header.add(title, BorderLayout.NORTH);
-        p.add(header, BorderLayout.NORTH);
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBackground(Color.WHITE);
+        p.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(darkBlue, 3),
+                    " My Bookings ",
+                    TitledBorder.LEFT,
+                    TitledBorder.TOP,
+                    new Font("Times New Roman", Font.BOLD, 20),
+                    darkBlue
+            ),
+            BorderFactory.createEmptyBorder(10, 12, 8, 12)
+        ));
 
         //  table
         String[] cols = {"Booking ID", "Flight", "Seat", "Date", "Amount", "Status"};
@@ -228,11 +269,15 @@ public class UserDashboardFrame extends JFrame {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         JTable table = new JTable(model);
-        
-        table.setRowHeight(32);
+        table.setRowHeight(25);
+        table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getTableHeader().setBackground(new Color(30, 60, 120));
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+        table.setGridColor(new Color(190, 190, 190));
+        table.setShowGrid(true);
+
+        table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 13));
+        table.getTableHeader().setBackground(Color.WHITE);
+        table.getTableHeader().setForeground(Color.BLACK);
 
         JScrollPane scroll = new JScrollPane(table);
 
@@ -250,46 +295,57 @@ public class UserDashboardFrame extends JFrame {
             }
         };
 
-            
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        buttonPanel.setBackground(Color.WHITE);
-        
         JButton refreshBtn = new JButton("Refresh");
-            refreshBtn.setFont(new Font("Arial", Font.BOLD, 14));
-            refreshBtn.setBackground(new Color(0, 150, 0));
+            refreshBtn.setFont(new Font("Times New Roman", Font.BOLD, 14));
 
-        JButton viewTicketBtn = new JButton("View Ticket");
-            viewTicketBtn.setFont(new Font("Arial", Font.BOLD, 14));
-            viewTicketBtn.setBackground(new Color(0, 150, 0));
-        
-            refreshBtn.addActionListener(e -> refresh.run());
-            viewTicketBtn.addActionListener(e -> {
-                int row = table.getSelectedRow();
-                if (row < 0) { JOptionPane.showMessageDialog(this, "Select a booking first."); return; }
+        JButton viewTicketBtn = new JButton("View Ticket") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
 
-                Booking b = user.getBookings().get(row);
-                if (b.getTicket() == null) {
-                    JOptionPane.showMessageDialog(this, "No ticket available for this booking.");
-                    return;
-                }
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        viewTicketBtn.setForeground(Color.WHITE);
+        viewTicketBtn.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        viewTicketBtn.setFocusPainted(false);
+        viewTicketBtn.setBorderPainted(false);
+        viewTicketBtn.setContentAreaFilled(false);
+        viewTicketBtn.setOpaque(false);
+        viewTicketBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        viewTicketBtn.setPreferredSize(new Dimension(120, 24));
+        viewTicketBtn.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12));
 
-                JTextArea area = new JTextArea(b.getTicket().viewTicket());
-                area.setEditable(false);
-                area.setFont(new Font("Monospaced", Font.PLAIN, 13));
-                area.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        refreshBtn.addActionListener(e -> refresh.run());
+        viewTicketBtn.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row < 0) { JOptionPane.showMessageDialog(this, "Select a booking first."); return; }
+
+            Booking b = user.getBookings().get(row);
+            if (b.getTicket() == null) {
+                JOptionPane.showMessageDialog(this, "No ticket available for this booking.");
+                return;
+            }
+
+            JTextArea area = new JTextArea(b.getTicket().viewTicket());
+            area.setEditable(false);
+            area.setFont(new Font("Monospaced", Font.PLAIN, 13));
+            area.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 
-                JOptionPane.showMessageDialog(this, new JScrollPane(area), "Ticket", JOptionPane.PLAIN_MESSAGE);
-            });
-            refresh.run();
+            JOptionPane.showMessageDialog(this, new JScrollPane(area), "Ticket", JOptionPane.PLAIN_MESSAGE);
+        });
+        refresh.run();
 
-            JPanel bottom = new JPanel();
-            bottom.add(refreshBtn);
-            bottom.add(viewTicketBtn);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.add(refreshBtn);
+        buttonPanel.add(viewTicketBtn);
 
-            p.add(header, BorderLayout.NORTH);
             p.add(scroll, BorderLayout.CENTER);
-            p.add(bottom, BorderLayout.SOUTH);
+            p.add(buttonPanel, BorderLayout.SOUTH);
             
             refresh.run();
             tabsAddRefreshListener(p, refresh);
