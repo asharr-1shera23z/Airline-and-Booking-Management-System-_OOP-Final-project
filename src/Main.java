@@ -22,5 +22,5 @@ public class Main {
             startgui.setVisible(true);
         } );
     }
-}
+} // end of main class
 
