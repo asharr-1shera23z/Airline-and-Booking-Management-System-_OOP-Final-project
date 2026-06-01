@@ -43,7 +43,7 @@ public class AdminDashboardFrame extends JFrame {
 
         JLabel hello = new JLabel("Admin Dashboard_ " + admin.getName());
         hello.setForeground(Color.WHITE);
-        hello.setFont(new Font("Times New Roman", Font.BOLD, 18));
+        hello.setFont(new Font("Times New Roman", Font.BOLD, 19));
         top.add(hello, BorderLayout.WEST);
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
@@ -113,7 +113,7 @@ public class AdminDashboardFrame extends JFrame {
         UIManager.put("TabbedPane.tabInsets", new Insets(8, 14, 8, 14));
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        tabs.setFont(new Font("Times New Roman", Font.BOLD, 17));
         tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
         tabs.addTab("Manage Airports", AirportsTab());
@@ -150,7 +150,7 @@ public class AdminDashboardFrame extends JFrame {
         };
         JTable table = new JTable(model);
 
-        table.setRowHeight(22);
+        table.setRowHeight(23);
         table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         table.setShowGrid(true);
         table.setGridColor(new Color(215, 215, 215));
@@ -398,8 +398,14 @@ public class AdminDashboardFrame extends JFrame {
 
     // 2. Managing aircrafts (adding, updating status, listing)
     private JPanel AircraftsTab() {
-        JPanel p = new JPanel(new BorderLayout(10, 10));
-        p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel p = new JPanel(new BorderLayout(6, 6));
+        p.setBackground(Color.WHITE);
+
+        TitledBorder titled = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 0, 139), 3),
+            " Manage Aircrafts ", TitledBorder.CENTER, TitledBorder.TOP,
+            new Font("Times New Roman", Font.BOLD, 20),
+            new Color(0, 0, 139)
+        );  p.setBorder(BorderFactory.createCompoundBorder( titled,  BorderFactory.createEmptyBorder(8, 8, 8, 8) ));
 
         String[] cols = { "ID", "Model", "Capacity", "Airline", "Maintenance", "Availability" };
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
@@ -408,7 +414,16 @@ public class AdminDashboardFrame extends JFrame {
                 return false;
             }
         };
+        
         JTable table = new JTable(model);
+        table.setRowHeight(23);
+        table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(215, 215, 215));
+        table.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table.getTableHeader().setBackground(new Color(0, 0, 139));
+        table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 19));
+        table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 0, 100)));
 
         Runnable refresh = () -> {
             model.setRowCount(0);
@@ -419,13 +434,29 @@ public class AdminDashboardFrame extends JFrame {
             }
         };
         refresh.run();
-
-        JButton addBtn = new JButton("Add Aircraft");
-        JButton updateBtn = new JButton("Update Status");
-        JButton deleteBtn = new JButton("Delete");
-        JButton refreshBtn = new JButton("Refresh");
+        
+        Color darkBlue = new Color(0, 0, 139);
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
 
         // Adding the aircraft__________________________________________________
+        JButton addBtn = new JButton("Add Aircraft") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        addBtn.setForeground(Color.WHITE);
+        addBtn.setFont(font);
+        addBtn.setFocusPainted(false);
+        addBtn.setBorderPainted(false);
+        addBtn.setContentAreaFilled(false);
+        addBtn.setOpaque(false);
+        addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        addBtn.setPreferredSize(new Dimension(120, 26));
         addBtn.addActionListener(e -> {
             while (true) {
                 JTextField id = new JTextField(), model2 = new JTextField(), cap = new JTextField(),
@@ -478,7 +509,26 @@ public class AdminDashboardFrame extends JFrame {
                 break;
             }
         });
+        
         // updating the aircraft________________________________________________
+        JButton updateBtn = new JButton("Update Status"){
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        updateBtn.setForeground(Color.WHITE);
+        updateBtn.setFont(font);
+        updateBtn.setFocusPainted(false);
+        updateBtn.setBorderPainted(false);
+        updateBtn.setContentAreaFilled(false);
+        updateBtn.setOpaque(false);
+        updateBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        updateBtn.setPreferredSize(new Dimension(140, 26));
         updateBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -504,7 +554,26 @@ public class AdminDashboardFrame extends JFrame {
                 refresh.run();
             }
         });
+        
         // deleting the aircraft________________________________________________
+        JButton deleteBtn = new JButton("Delete") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        deleteBtn.setForeground(Color.WHITE);
+        deleteBtn.setFont(font);
+        deleteBtn.setFocusPainted(false);
+        deleteBtn.setBorderPainted(false);
+        deleteBtn.setContentAreaFilled(false);
+        deleteBtn.setOpaque(false);
+        deleteBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteBtn.setPreferredSize(new Dimension(140, 26));
         deleteBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -531,13 +600,31 @@ public class AdminDashboardFrame extends JFrame {
                     "Success", JOptionPane.INFORMATION_MESSAGE);
         });
 
+        JButton refreshBtn = new JButton("Refresh") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFont(font);
+        refreshBtn.setFocusPainted(false);
+        refreshBtn.setBorderPainted(false);
+        refreshBtn.setContentAreaFilled(false);
+        refreshBtn.setOpaque(false);
+        refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshBtn.setPreferredSize(new Dimension(120, 26));
         refreshBtn.addActionListener(e -> refresh.run());
 
         JPanel buttons = new JPanel();
         buttons.add(addBtn);
         buttons.add(updateBtn);
-        buttons.add(deleteBtn);
         buttons.add(refreshBtn);
+        buttons.add(deleteBtn);
 
         p.add(new JScrollPane(table), BorderLayout.CENTER);
         p.add(buttons, BorderLayout.SOUTH);
@@ -546,18 +633,34 @@ public class AdminDashboardFrame extends JFrame {
 
     // 3. Managing flights (adding, updating status/fare, deleting, listing)
     private JPanel FlightsTab() {
-        JPanel p = new JPanel(new BorderLayout(10, 10));
-        p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel p = new JPanel(new BorderLayout(6, 6));
+        p.setBackground(Color.WHITE);
 
-        String[] cols = { "Flight ID", "From", "To", "Departure", "Arrival", "Fare", "Capacity", "Available",
-                "Status" };
+        TitledBorder titled = BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(0, 0, 139), 3),
+            " Manage Flights ", TitledBorder.CENTER, TitledBorder.TOP,
+            new Font("Times New Roman", Font.BOLD, 20),
+            new Color(0, 0, 139)
+        );
+        p.setBorder(BorderFactory.createCompoundBorder(titled, BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+
+        String[] cols = { "Flight ID", "From", "To", "Departure", "Arrival", "Fare", "Capacity", "Available", "Status" };
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) {
                 return false;
             }
         };
+        
         JTable table = new JTable(model);
+        table.setRowHeight(22);
+        table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(215, 215, 215));
+        table.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table.getTableHeader().setBackground(new Color(0, 0, 139));
+        table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 19));
+        table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 0, 100)));
 
         Runnable refresh = () -> {
             model.setRowCount(0);
@@ -569,13 +672,29 @@ public class AdminDashboardFrame extends JFrame {
             }
         };
         refresh.run();
+        
+        Color darkBlue = new Color(0, 0, 139);
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
 
-        JButton addBtn = new JButton("Add Flight");
-        JButton updateBtn = new JButton("Update");
-        JButton removeBtn = new JButton("Remove");
-        JButton refreshBtn = new JButton("Refresh");
-
-        // Adding flights______________________________________________________
+          // Adding flights______________________________________________________
+        JButton addBtn = new JButton("Add Flight") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        addBtn.setForeground(Color.WHITE);
+        addBtn.setFont(font);
+        addBtn.setFocusPainted(false);
+        addBtn.setBorderPainted(false);
+        addBtn.setContentAreaFilled(false);
+        addBtn.setOpaque(false);
+        addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        addBtn.setPreferredSize(new Dimension(120, 26));
         addBtn.addActionListener(e -> {
             while (true) {
                 if (system.getAirports().size() < 2) {
@@ -674,7 +793,26 @@ public class AdminDashboardFrame extends JFrame {
                 return;
             }
         });
+       
         // Updating flights____________________________________________________
+        JButton updateBtn = new JButton("Update") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        updateBtn.setForeground(Color.WHITE);
+        updateBtn.setFont(font);
+        updateBtn.setFocusPainted(false);
+        updateBtn.setBorderPainted(false);
+        updateBtn.setContentAreaFilled(false);
+        updateBtn.setOpaque(false);
+        updateBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        updateBtn.setPreferredSize(new Dimension(140, 26));
         updateBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -725,7 +863,26 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
 
         });
+       
         // removing flights___________________________________________________
+        JButton removeBtn = new JButton("Remove") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        removeBtn.setForeground(Color.WHITE);
+        removeBtn.setFont(font);
+        removeBtn.setFocusPainted(false);
+        removeBtn.setBorderPainted(false);
+        removeBtn.setContentAreaFilled(false);
+        removeBtn.setOpaque(false);
+        removeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        removeBtn.setPreferredSize(new Dimension(140, 26));
         removeBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -751,13 +908,32 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         });
 
+        // refresh button____________________________________________________
+        JButton refreshBtn = new JButton("Refresh") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFont(font);
+        refreshBtn.setFocusPainted(false);
+        refreshBtn.setBorderPainted(false);
+        refreshBtn.setContentAreaFilled(false);
+        refreshBtn.setOpaque(false);
+        refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshBtn.setPreferredSize(new Dimension(140, 26));
         refreshBtn.addActionListener(e -> refresh.run());
 
         JPanel buttons = new JPanel();
         buttons.add(addBtn);
         buttons.add(updateBtn);
-        buttons.add(removeBtn);
         buttons.add(refreshBtn);
+        buttons.add(removeBtn);
 
         p.add(new JScrollPane(table), BorderLayout.CENTER);
         p.add(buttons, BorderLayout.SOUTH);
@@ -766,9 +942,16 @@ public class AdminDashboardFrame extends JFrame {
 
     // 4. Managing crew (adding, assigning to flights, listing)
     private JPanel CrewTab() {
-        JPanel p = new JPanel(new BorderLayout(10, 10));
-        p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel p = new JPanel(new BorderLayout(6, 6));
+        p.setBackground(Color.WHITE);
 
+        TitledBorder titled = BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(0, 0, 139), 3),
+            " Manage Crew ", TitledBorder.CENTER, TitledBorder.TOP,
+            new Font("Times New Roman", Font.BOLD, 20),
+            new Color(0, 0, 139)
+        );p.setBorder(BorderFactory.createCompoundBorder(titled, BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+        
         String[] cols = { "Emp ID", "Name", "Role", "Available", "Assigned Flights" };
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
@@ -776,7 +959,16 @@ public class AdminDashboardFrame extends JFrame {
                 return false;
             }
         };
+        
         JTable table = new JTable(model);
+        table.setRowHeight(23);
+        table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(215, 215, 215));
+        table.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table.getTableHeader().setBackground(new Color(0, 0, 139));
+        table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 19));
+        table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 0, 100)));
 
         Runnable refresh = () -> {
             model.setRowCount(0);
@@ -790,11 +982,27 @@ public class AdminDashboardFrame extends JFrame {
         };
         refresh.run();
 
-        JButton addBtn = new JButton("Add Crew");
-        JButton assignBtn = new JButton("Assign to Flight");
-        JButton removeBtn = new JButton("Remove Crew");
-        JButton refreshBtn = new JButton("Refresh");
-
+        Color darkBlue = new Color(0, 0, 139);
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
+        // Adding crew members________________________________________________
+        JButton addBtn = new JButton("Add Crew") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        addBtn.setForeground(Color.WHITE);
+        addBtn.setFont(font);
+        addBtn.setFocusPainted(false);
+        addBtn.setBorderPainted(false);
+        addBtn.setContentAreaFilled(false);
+        addBtn.setOpaque(false);
+        addBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        addBtn.setPreferredSize(new Dimension(120, 26));
         addBtn.addActionListener(e -> {
             while (true) { // ← Galat input pe dobara maangega
                 String[] types = { "Pilot", "CabinCrew", "GroundStaff" };
@@ -895,6 +1103,25 @@ public class AdminDashboardFrame extends JFrame {
             }
         });
 
+        // Assigning crew to flights________________________________________________
+        JButton assignBtn = new JButton("Assign to Flight") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        assignBtn.setForeground(Color.WHITE);
+        assignBtn.setFont(font);
+        assignBtn.setFocusPainted(false);
+        assignBtn.setBorderPainted(false);
+        assignBtn.setContentAreaFilled(false);
+        assignBtn.setOpaque(false);
+        assignBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        assignBtn.setPreferredSize(new Dimension(160, 26));
         assignBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -931,6 +1158,25 @@ public class AdminDashboardFrame extends JFrame {
             refresh.run();
         });
 
+        // Removing crew members________________________________________________
+        JButton removeBtn = new JButton("Remove Crew") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        removeBtn.setForeground(Color.WHITE);
+        removeBtn.setFont(font);
+        removeBtn.setFocusPainted(false);
+        removeBtn.setBorderPainted(false);
+        removeBtn.setContentAreaFilled(false);
+        removeBtn.setOpaque(false);
+        removeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        removeBtn.setPreferredSize(new Dimension(140, 26)); 
         removeBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -966,13 +1212,32 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         });
 
+        // refresh button____________________________________________________
+        JButton refreshBtn = new JButton("Refresh") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFont(font);
+        refreshBtn.setFocusPainted(false);
+        refreshBtn.setBorderPainted(false);
+        refreshBtn.setContentAreaFilled(false);
+        refreshBtn.setOpaque(false);
+        refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshBtn.setPreferredSize(new Dimension(120, 26));
         refreshBtn.addActionListener(e -> refresh.run());
 
         JPanel buttons = new JPanel();
         buttons.add(addBtn);
         buttons.add(assignBtn);
-        buttons.add(removeBtn);
         buttons.add(refreshBtn);
+        buttons.add(removeBtn);
 
         p.add(new JScrollPane(table), BorderLayout.CENTER);
         p.add(buttons, BorderLayout.SOUTH);
@@ -981,9 +1246,16 @@ public class AdminDashboardFrame extends JFrame {
 
     // 5. Managing bookings (viewing, updating status, deleting)
     private JPanel BookingsTab() {
-        JPanel p = new JPanel(new BorderLayout(10, 10));
-        p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel p = new JPanel(new BorderLayout(6, 6));
+        p.setBackground(Color.WHITE);
 
+        TitledBorder titled = BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(0, 0, 139), 3),
+            " Manage Bookings ", TitledBorder.CENTER, TitledBorder.TOP,
+            new Font("Times New Roman", Font.BOLD, 20),
+            new Color(0, 0, 139)
+        ); p.setBorder(BorderFactory.createCompoundBorder(titled, BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+        
         String[] cols = { "Booking ID", "User", "Flight", "Seat", "Date", "Amount", "Status" };
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
@@ -991,7 +1263,16 @@ public class AdminDashboardFrame extends JFrame {
                 return false;
             }
         };
+       
         JTable table = new JTable(model);
+        table.setRowHeight(23);
+        table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(215, 215, 215));
+        table.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table.getTableHeader().setBackground(new Color(0, 0, 139));
+        table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 19));
+        table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 0, 100)));
 
         Runnable refresh = () -> {
             model.setRowCount(0);
@@ -1004,10 +1285,28 @@ public class AdminDashboardFrame extends JFrame {
         };
         refresh.run();
 
-        JButton viewBtn = new JButton("View Ticket");
-        JButton cancelBtn = new JButton("Cancel & Refund");
-        JButton refreshBtn = new JButton("Refresh");
+        Color darkBlue = new Color(0, 0, 139);
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
 
+        // View Ticket Button
+        JButton viewBtn = new JButton("View Ticket") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        viewBtn.setForeground(Color.WHITE);
+        viewBtn.setFont(font);
+        viewBtn.setFocusPainted(false);
+        viewBtn.setBorderPainted(false);
+        viewBtn.setContentAreaFilled(false);
+        viewBtn.setOpaque(false);
+        viewBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        viewBtn.setPreferredSize(new Dimension(140, 26));
         viewBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -1030,6 +1329,25 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.PLAIN_MESSAGE);
         });
 
+        // Cancel & Refund Button
+        JButton cancelBtn = new JButton("Cancel & Refund") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        cancelBtn.setForeground(Color.WHITE);
+        cancelBtn.setFont(font);
+        cancelBtn.setFocusPainted(false);
+        cancelBtn.setBorderPainted(false);
+        cancelBtn.setContentAreaFilled(false);
+        cancelBtn.setOpaque(false);
+        cancelBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cancelBtn.setPreferredSize(new Dimension(160, 26));
         cancelBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -1064,12 +1382,30 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         });
 
+        JButton refreshBtn = new JButton("Refresh") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFont(font);
+        refreshBtn.setFocusPainted(false);
+        refreshBtn.setBorderPainted(false);
+        refreshBtn.setContentAreaFilled(false);
+        refreshBtn.setOpaque(false);
+        refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshBtn.setPreferredSize(new Dimension(120, 26));
         refreshBtn.addActionListener(e -> refresh.run());
 
         JPanel buttons = new JPanel();
         buttons.add(viewBtn);
-        buttons.add(cancelBtn);
         buttons.add(refreshBtn);
+        buttons.add(cancelBtn);
 
         p.add(new JScrollPane(table), BorderLayout.CENTER);
         p.add(buttons, BorderLayout.SOUTH);
@@ -1078,8 +1414,15 @@ public class AdminDashboardFrame extends JFrame {
 
     // 6. Managing refund requests (viewing, approving/rejecting)
     private JPanel RefundsTab() {
-        JPanel p = new JPanel(new BorderLayout(10, 10));
-        p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel p = new JPanel(new BorderLayout(6, 6));
+        p.setBackground(Color.WHITE);
+
+        TitledBorder titled = BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(0, 0, 139), 3),
+            " Manage Refunds ", TitledBorder.CENTER, TitledBorder.TOP,
+            new Font("Times New Roman", Font.BOLD, 20),
+            new Color(0, 0, 139)
+        ); p.setBorder(BorderFactory.createCompoundBorder(titled, BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 
         String[] cols = { "Request ID", "Booking", "User", "Reason", "Date", "Status" };
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
@@ -1088,7 +1431,16 @@ public class AdminDashboardFrame extends JFrame {
                 return false;
             }
         };
+        
         JTable table = new JTable(model);
+        table.setRowHeight(23);
+        table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(215, 215, 215));
+        table.getTableHeader().setPreferredSize(new Dimension(0, 30));
+        table.getTableHeader().setBackground(new Color(0, 0, 139));
+        table.getTableHeader().setFont(new Font("Times New Roman", Font.BOLD, 19));
+        table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 0, 100)));
 
         Runnable refresh = () -> {
             model.setRowCount(0);
@@ -1101,11 +1453,29 @@ public class AdminDashboardFrame extends JFrame {
             }
         };
         refresh.run();
-        JButton viewBtn = new JButton("View Booking Details");
-        JButton approveBtn = new JButton("Approve");
-        JButton rejectBtn = new JButton("Reject");
-        JButton refreshBtn = new JButton("Refresh");
+        
+        Color darkBlue = new Color(0, 0, 139);
+        Font font = new Font("Times New Roman", Font.BOLD, 16);
 
+        // View Details Button
+        JButton viewBtn = new JButton("View Booking Details") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        viewBtn.setForeground(Color.WHITE);
+        viewBtn.setFont(font);
+        viewBtn.setFocusPainted(false);
+        viewBtn.setBorderPainted(false);
+        viewBtn.setContentAreaFilled(false);
+        viewBtn.setOpaque(false);
+        viewBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        viewBtn.setPreferredSize(new Dimension(180, 26));     
         viewBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -1130,7 +1500,25 @@ public class AdminDashboardFrame extends JFrame {
             JOptionPane.showMessageDialog(this, new JScrollPane(area), "Refund Request Details",
                     JOptionPane.INFORMATION_MESSAGE);
         });
-
+        
+        JButton approveBtn = new JButton("Approve") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        approveBtn.setForeground(Color.WHITE);
+        approveBtn.setFont(font);
+        approveBtn.setFocusPainted(false);
+        approveBtn.setBorderPainted(false);
+        approveBtn.setContentAreaFilled(false);
+        approveBtn.setOpaque(false);
+        approveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        approveBtn.setPreferredSize(new Dimension(120, 26));    
         approveBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -1160,6 +1548,25 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         });
 
+        // Reject Button
+        JButton rejectBtn = new JButton("Reject") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(220, 50, 50));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        rejectBtn.setForeground(Color.WHITE);
+        rejectBtn.setFont(font);
+        rejectBtn.setFocusPainted(false);
+        rejectBtn.setBorderPainted(false);
+        rejectBtn.setContentAreaFilled(false);
+        rejectBtn.setOpaque(false);
+        rejectBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        rejectBtn.setPreferredSize(new Dimension(120, 26));
         rejectBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row < 0) {
@@ -1185,8 +1592,27 @@ public class AdminDashboardFrame extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         });
 
+        // Refresh Button
+        JButton refreshBtn = new JButton("Refresh") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(darkBlue);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFont(font);
+        refreshBtn.setFocusPainted(false);
+        refreshBtn.setBorderPainted(false);
+        refreshBtn.setContentAreaFilled(false);
+        refreshBtn.setOpaque(false);
+        refreshBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshBtn.setPreferredSize(new Dimension(120, 26));
         refreshBtn.addActionListener(e -> refresh.run());
-
+        
         JPanel buttons = new JPanel();
         buttons.add(viewBtn);
         buttons.add(approveBtn);
@@ -1200,37 +1626,48 @@ public class AdminDashboardFrame extends JFrame {
 
     // 7. Generating reports (bookings, flights, revenue, refunds)
     private JPanel ReportsTab() {
-        JPanel p = new JPanel(new BorderLayout(10, 10));
-        p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel p = new JPanel(new BorderLayout(6, 6));
+        p.setBackground(Color.WHITE);
 
+        TitledBorder titled = BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(new Color(0, 0, 139), 3),
+            " Reports ", TitledBorder.CENTER, TitledBorder.TOP,
+            new Font("Times New Roman", Font.BOLD, 20),
+            new Color(0, 0, 139)
+        );  p.setBorder(BorderFactory.createCompoundBorder(titled, BorderFactory.createEmptyBorder(8, 8, 8, 8)));
+       
         JTextArea area = new JTextArea();
         area.setEditable(false);
         area.setFont(new Font("Times New Roman", Font.PLAIN, 14));
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
 
+        Color darkBlue = new Color(0, 0, 139);
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
-        JPanel buttons = new JPanel();
-        buttons.add(reportButton("Bookings", area, () -> bookingReportText()));
-        buttons.add(reportButton("Flights", area, () -> flightReportText()));
-        buttons.add(reportButton("Revenue", area, () -> revenueReportText()));
-        buttons.add(reportButton("Refunds", area, () -> refundReportText()));
-        buttons.add(reportButton("Full Report", area, () -> fullReportText()));
-        buttonPanel.add(buttons);
+  
+        JButton bookingsBtn = createStyledReportButton("Bookings", darkBlue);
+        JButton flightsBtn = createStyledReportButton("Flights", darkBlue);
+        JButton revenueBtn = createStyledReportButton("Revenue", darkBlue);
+        JButton refundsBtn = createStyledReportButton("Refunds", darkBlue);
+        JButton fullBtn = createStyledReportButton("Full Report", darkBlue);
+
+        bookingsBtn.addActionListener(e -> { area.setText(bookingReportText());  area.setCaretPosition(0);});
+        flightsBtn.addActionListener(e -> { area.setText(flightReportText());  area.setCaretPosition(0);});
+        revenueBtn.addActionListener(e -> { area.setText(revenueReportText()); area.setCaretPosition(0); });
+        refundsBtn.addActionListener(e -> { area.setText(refundReportText());  area.setCaretPosition(0);   });
+        fullBtn.addActionListener(e -> { area.setText(fullReportText());  area.setCaretPosition(0); });
+
+        buttonPanel.add(bookingsBtn);
+        buttonPanel.add(flightsBtn);
+        buttonPanel.add(revenueBtn);
+        buttonPanel.add(refundsBtn);
+        buttonPanel.add(fullBtn);
+
         p.add(buttonPanel, BorderLayout.NORTH);
         p.add(new JScrollPane(area), BorderLayout.CENTER);
 
         area.setText(fullReportText());
         return p;
-    }
-
-    private JButton reportButton(String label, JTextArea area, java.util.function.Supplier<String> producer) {
-        JButton b = new JButton(label);
-        b.addActionListener(e -> {
-            area.setText(producer.get());
-            area.setCaretPosition(0);
-        });
-        return b;
     }
 
     private String bookingReportText() {
@@ -1390,4 +1827,28 @@ public class AdminDashboardFrame extends JFrame {
     private void err(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
+
+    private JButton createStyledReportButton(String text, Color bgColor) {
+        JButton btn = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(bgColor);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(140, 30));
+        return btn;
+    }
+
+    //_______________________________________________________________________________________
 }
