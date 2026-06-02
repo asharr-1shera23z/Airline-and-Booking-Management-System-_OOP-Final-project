@@ -4,6 +4,7 @@
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 
 public class LoginFrame extends JFrame {
@@ -20,7 +21,7 @@ public class LoginFrame extends JFrame {
         this.parent = parent;
 
         setTitle((role.equals("admin")) ? "Admin Login" : "User Login");
-        setSize(400, 280); // ye window ky sizes
+             setSize(440, 400);// ye window ky sizes
         setLocationRelativeTo(null); // centre on screen pr open hoga iss fucntion se 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //dispose se onlyloginframe close hogi not the whole app that why iu write dispose instead of close
 
@@ -35,35 +36,83 @@ public class LoginFrame extends JFrame {
     }
 
     private void loginstart() {
-        JPanel main = new JPanel(new BorderLayout(10, 10));
-        main.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        JPanel main = new JPanel(new BorderLayout(20, 20));
+        main.setBackground(Color.WHITE);
+        main.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
 
-        JLabel title = new JLabel((role.equals("admin") ? "______Admin Login______" : "______User Login______"), SwingConstants.CENTER); // title of the login frame
-        title.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        title.setForeground(new Color(30, 60, 120));
+        JLabel title = new JLabel(role.equals("admin") ? "Admin Login" : "User Login", SwingConstants.CENTER);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 28));
+        title.setForeground(new Color(0, 0, 139)); // Dark Blue
         main.add(title, BorderLayout.NORTH);
 
-        JPanel form = new JPanel(new GridLayout(2, 2, 10, 10)); 
-        form.add(new JLabel("Username:"));
+        JPanel form = new JPanel(new GridLayout(4, 2, 6, 10));
+        form.setBackground(Color.WHITE);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
         usernameField = new JTextField();
-        form.add(usernameField);
-        form.add(new JLabel("Password:"));
+        usernameField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+        usernameField.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(0, 0, 139), 2),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)));
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
         passwordField = new JPasswordField();
+        passwordField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(0, 0, 139), 2),
+                BorderFactory.createEmptyBorder(8, 10, 8, 10)));
+
+        form.add(userLabel);
+        form.add(usernameField);
+        form.add(passLabel);
         form.add(passwordField);
+
         main.add(form, BorderLayout.CENTER);
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        JButton loginBtn = new JButton("Login");
-        loginBtn.addActionListener(e -> doLogin()); // login button pr click krne se doLogin function call hoga
-        JButton backBtn = new JButton("Back");
-        
+       
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttons.setBackground(Color.WHITE);
+
+        // Login Button (Dark Blue)
+       JButton loginBtn = new JButton("Login") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(0, 128, 0));  // Green
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 14, 14);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        styleButton(loginBtn, new Color(0, 128, 0), 19);
+
+        // Back Button (Red)
+        JButton backBtn = new JButton("Back") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(new Color(220, 50, 50)); // Red
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        styleButton(backBtn, new Color(220, 50, 50), 19);
+
+        loginBtn.addActionListener(e -> doLogin());
         backBtn.addActionListener(e -> {
-            parent.setVisible(true); // back button pr click krne se previous frame visible hoga
-            dispose(); // aur current login frame close ho jayega
+            parent.setVisible(true);
+            dispose();
         });
-    
+
         buttons.add(loginBtn);
         buttons.add(backBtn);
+        main.add(buttons, BorderLayout.SOUTH);
+
+        setContentPane(main);
+
         main.add(buttons, BorderLayout.SOUTH);
 
         setContentPane(main);
@@ -131,4 +180,16 @@ public class LoginFrame extends JFrame {
     private void err(String msg) {
     JOptionPane.showMessageDialog(this, msg, "Validation Error", JOptionPane.ERROR_MESSAGE);
 }
+
+private void styleButton(JButton btn, Color bgColor, int fontSize) {
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Times New Roman", Font.BOLD, fontSize));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(130, 35));
+    }
+
 }

@@ -1,4 +1,3 @@
-// StartFrame.java (Updated - Better Colors + Black Text)
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -11,7 +10,7 @@ public class StartFrame extends JFrame {
         this.system = system;
 
         setTitle("Airline Management & Booking System");
-        setSize(580, 520);                   
+        setSize(600, 540);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -22,84 +21,97 @@ public class StartFrame extends JFrame {
             }
         });
 
-        startUI(); 
+        startUI();
     }
 
     private void startUI() {
-        JPanel main = new JPanel(new BorderLayout(10, 10));
-        main.setBackground(new Color(245, 248, 252));   
+        JPanel main = new JPanel(new BorderLayout(10, 15));
+        main.setBackground(Color.WHITE);             
+        main.setBorder(BorderFactory.createEmptyBorder(25, 45, 18, 45));
 
+        // ---------- TITLE AREA ----------
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
         titlePanel.setOpaque(false);
 
-        JLabel welcome = new JLabel( "WELCOME TO", SwingConstants.CENTER);
-        welcome.setFont(new Font("Times New Roman", Font.BOLD, 22)   );
-        welcome.setForeground(new Color(30, 60, 120));
+        JLabel welcome = new JLabel("WELCOME TO", SwingConstants.CENTER);
+        welcome.setFont(new Font("Times New Roman", Font.BOLD, 22));
+        welcome.setForeground(Color.DARK_GRAY);
         welcome.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel title = new JLabel("_________Airline Management & Booking System_________", SwingConstants.CENTER);
-        title.setFont(new Font("Times New Roman", Font.BOLD,  19));
-        title.setForeground(new Color(0, 51, 102));     
+        JLabel title = new JLabel("Airline Management & Booking System", SwingConstants.CENTER);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 27));
+        title.setForeground(new Color(0, 0, 139));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-  
-        titlePanel.add(Box.createVerticalStrut(20));
+
+ 
+
+        titlePanel.add(Box.createVerticalStrut(5));
         titlePanel.add(welcome);
         titlePanel.add(Box.createVerticalStrut(8));
         titlePanel.add(title);
 
+
         main.add(titlePanel, BorderLayout.NORTH);
 
-        JLabel subtitle = new JLabel("Choose an option", SwingConstants.CENTER);
-        subtitle.setFont(new Font("Times New Roman", Font.PLAIN, 19));
-
-        JPanel center = new JPanel(new GridLayout(5, 1, 12, 12));
-        center.setBorder(BorderFactory.createEmptyBorder(10, 60, 40, 60));
+        // ---------- CENTER BUTTON AREA ----------
+        JPanel center = new JPanel(new GridLayout(5, 1, 0, 14));
         center.setOpaque(false);
+        center.setBorder(BorderFactory.createEmptyBorder(18, 80, 25, 80));
+
+        
+        JLabel subtitle = new JLabel("Select the option", SwingConstants.CENTER);
+        subtitle.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        subtitle.setForeground(Color.DARK_GRAY);
         center.add(subtitle);
 
-            // USERS BUTTONS
         JButton userLoginButton = makeButton("User Login");
         userLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 openLogin("user");
             }
-        } );
-      
+        });
+
         JButton userSignupButton = makeButton("User SignUp");
         userSignupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 openSignUp("user");
-                }
-            } );
-            
-            // ADMINS BUTTONS
+            }
+        });
+
         JButton adminLoginButton = makeButton("Admin Login");
         adminLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 openLogin("admin");
             }
-        }  );
+        });
 
         JButton adminSignupButton = makeButton("Admin SignUp");
         adminSignupButton.addActionListener(new ActionListener() {
-        @Override 
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-            openSignUp("admin");
-        }
-        } );
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                openSignUp("admin");
+            }
+        });
 
         center.add(userLoginButton);
         center.add(userSignupButton);
         center.add(adminLoginButton);
         center.add(adminSignupButton);
+
         main.add(center, BorderLayout.CENTER);
 
+        // ---------- FOOTER ----------
+        JLabel by = new JLabel("By", SwingConstants.CENTER);
+        by.setFont(new Font("Times New Roman", Font.ITALIC, 14));
+        by.setForeground(Color.GRAY);
+        main.add(by, BorderLayout.SOUTH);
+
         JLabel footer = new JLabel("Faizan Ahmad, M. Ashar Sheraz, M. Usman Azeem, Zarak Khan", SwingConstants.CENTER);
-        footer.setFont(new Font("Times New Roman", Font.ITALIC, 17));
+        footer.setFont(new Font("Times New Roman", Font.ITALIC, 16));
         footer.setForeground(Color.GRAY);
         main.add(footer, BorderLayout.SOUTH);
 
@@ -107,20 +119,46 @@ public class StartFrame extends JFrame {
     }
 
     private JButton makeButton(String text) {
-
-        JButton button = new JButton(text);
-
-        button.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+        JButton button = new RoundedButton(text);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 17));
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setFocusable(false);
-        button.setBackground(new Color(0, 0, 139));
-        button.setForeground(Color.BLACK);
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 102, 204), 2),
-            BorderFactory.createEmptyBorder(12, 0, 12, 0)
-        ));
-
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
+        button.setPreferredSize(new Dimension(200, 40)); 
         return button;
+    }
+
+    // Simple rounded grey button
+    private static class RoundedButton extends JButton {
+        public RoundedButton(String text) {
+            super(text);
+            setContentAreaFilled(false);
+            setBorderPainted(false);
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            if (getModel().isPressed()) {
+                g2.setColor(new Color(200, 200, 200));
+            } else if (getModel().isRollover()) {
+                g2.setColor(new Color(220, 220, 220));
+            } else {
+                g2.setColor(new Color(235, 235, 235));
+            }
+
+            g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 28, 28);
+            g2.setColor(new Color(170, 170, 170));
+            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 28, 28);
+            g2.dispose();
+
+            super.paintComponent(g);
+        }
     }
 
     private void openLogin(String role) {
