@@ -28,7 +28,6 @@ public class UserDashboardFrame extends JFrame {
         setSize(900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override public void windowClosing(java.awt.event.WindowEvent e) {
                 FileHandler.saveSystem(system);
@@ -52,7 +51,7 @@ public class UserDashboardFrame extends JFrame {
         JPanel main = new JPanel(new BorderLayout());
 
         JPanel top = new JPanel(new BorderLayout());
-        top.setBackground(new Color(30, 60, 120));
+        top.setBackground(new Color(0, 0, 130));
         top.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
         JLabel hello = new JLabel("Welcome! " + user.getName());
@@ -62,7 +61,6 @@ public class UserDashboardFrame extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         buttonPanel.setOpaque(false);
-
         
         JButton updateBtn = new JButton("Update Profile") {
             @Override
@@ -113,7 +111,9 @@ public class UserDashboardFrame extends JFrame {
         deleteBtn.addActionListener(e -> deleteUserAccount());
 
         JButton logoutBtn = new JButton("Logout");
-        logoutBtn.addActionListener(e -> { user.logout(); FileHandler.saveSystem(system);
+        logoutBtn.addActionListener(e -> { 
+            user.logout(); 
+            FileHandler.saveSystem(system);
             startFrame.setVisible(true);
             dispose();
         });
@@ -122,8 +122,9 @@ public class UserDashboardFrame extends JFrame {
         buttonPanel.add(deleteBtn);
         buttonPanel.add(logoutBtn);
         top.add(buttonPanel, BorderLayout.EAST);
+
         main.add(top, BorderLayout.NORTH);
-        
+
         tabs = new JTabbedPane();
         tabs.setFont(new Font("Times New Roman", Font.BOLD, 14));
         tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -135,6 +136,7 @@ public class UserDashboardFrame extends JFrame {
         tabs.addTab("Notifications",      NotificationsPanel());
 
         main.add(tabs, BorderLayout.CENTER);
+
         setContentPane(main);
 
     }
@@ -155,6 +157,7 @@ public class UserDashboardFrame extends JFrame {
         p.setBorder(BorderFactory.createCompoundBorder(titled, BorderFactory.createEmptyBorder(8, 8, 8, 8)));
 
         Set<String> citySet = new HashSet<>();
+        
         List<Flight> allFlights = system.searchFlights();   
         for (Flight f : allFlights) {
             citySet.add(f.getSource().getCity());
@@ -235,13 +238,14 @@ public class UserDashboardFrame extends JFrame {
         filter.add(searchBtn);
         filter.add(showAllBtn);
 
-        // Table to display flights
+       
         String[] cols = {"Flight ID", "From", "To", "Departure", "Arrival", "Fare (Rs)", "Available", "Status"};
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
 
         JTable table = new JTable(model);
+        
         table.setRowHeight(22);
         table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         table.setShowGrid(true);
@@ -278,11 +282,12 @@ public class UserDashboardFrame extends JFrame {
 
         searchBtn.addActionListener(e -> refresh.run());
         showAllBtn.addActionListener(e -> { sourceCombo.setSelectedIndex(0); destCombo.setSelectedIndex(0); refresh.run(); });
+
         refresh.run();
 
         p.add (filter, BorderLayout.NORTH);
         p.add(scroll, BorderLayout.CENTER);
-        // Refresh whenever this tab is shown
+     
         tabsAddRefreshListener(p, refresh);
 
         return p;
@@ -300,7 +305,6 @@ public class UserDashboardFrame extends JFrame {
 
         Color darkBlue = new Color(0, 0, 139);
 
-        // _____________________ Integrated Flight Selection & Booking Form ____________________
         JPanel top = new JPanel(new BorderLayout(5, 5));
         top.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createLineBorder(darkBlue, 2),
@@ -317,7 +321,7 @@ public class UserDashboardFrame extends JFrame {
         flightTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane tableScroll = new JScrollPane(flightTable);
-        loadFlights();   // loads all available flights
+        loadFlights();  
 
         flightTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) onFlightPicked();
@@ -325,7 +329,7 @@ public class UserDashboardFrame extends JFrame {
 
         top.add(tableScroll, BorderLayout.CENTER);
 
-        // ==================== Booking Details (Middle) ====================
+    
         JPanel mid = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
         mid.setBackground(Color.WHITE);
 
@@ -376,7 +380,6 @@ public class UserDashboardFrame extends JFrame {
         totalLabel.setForeground(darkBlue);
         mid.add(totalLabel);
 
-        // ==================== Bottom Buttons ====================
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
         bottom.setBackground(Color.WHITE);
 
@@ -417,7 +420,7 @@ public class UserDashboardFrame extends JFrame {
         cancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cancel.setPreferredSize(new Dimension(120, 40));
         cancel.addActionListener(e -> {
-            // Clear form when cancel is clicked
+           
             flightTable.clearSelection();
             seatCombo.removeAllItems();
             luggageField.setText("0");
@@ -427,7 +430,6 @@ public class UserDashboardFrame extends JFrame {
         bottom.add(confirm);
         bottom.add(cancel);
 
-        // Assemble everything
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.add(top, BorderLayout.CENTER);
         centerPanel.add(mid, BorderLayout.SOUTH);
@@ -862,7 +864,25 @@ public class UserDashboardFrame extends JFrame {
         Seat seat = pickedSeat();
         if (seat == null) return;
 
-        double luggage = parseDouble(luggageField.getText(), 0);
+     double luggage;
+
+        try {
+            luggage = Double.parseDouble(luggageField.getText().trim());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Please enter valid luggage weight.");
+            return;
+        }
+
+        if (luggage < 0) {
+            JOptionPane.showMessageDialog(this, "Luggage weight cannot be negative.");
+            return;
+        }
+
+        if (luggage > 50) {
+            JOptionPane.showMessageDialog(this, "Luggage limit exceeded! Maximum allowed luggage is 50 kg.");
+            return;
+        }
+
         double total = user.calculateFare(selectedFlight, luggage);
 
         PaymentMethod method = pickPaymentMethod();

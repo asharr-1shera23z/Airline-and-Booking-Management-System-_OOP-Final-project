@@ -5,7 +5,6 @@ then opens first GUI StartFrame. File saving happens when window closes.*/
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-//changes: added comments, i removed demo data thing in main class.
 
 public class Main {
     public static void main(String[] args) {

@@ -170,6 +170,7 @@ public class LoginFrame extends JFrame {
             } else {
                 new UserDashboardFrame((User) acc, system, parent).setVisible(true);
             }
+            
             dispose(); // close login frame after opening dashboard
         } catch (HeadlessException ex) {
 
